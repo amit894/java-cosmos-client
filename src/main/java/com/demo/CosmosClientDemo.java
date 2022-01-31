@@ -33,7 +33,7 @@ public class CosmosClientDemo {
 //
 
         String hostName = "https://medium-blog.documents.azure.com:443/";
-        String masterKey = "OxMZDtgrv1hb1kCIWYLKLUg0m4yjajapP2MgcIZRAQfOL84b8Ay5d9nW5bnBORvYpMN87GKbqGwnu9XdGGTt6g==";
+        String masterKey= "secret";
         //String databaseName= "AzureSampleFamilyDatabase";
         ConsistencyLevel consistencyLevel = ConsistencyLevel.SESSION;
         CosmosClient syncClient = null;
