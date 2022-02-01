@@ -1,13 +1,13 @@
 package com.demo;
 
+import com.azure.core.credential.AccessToken;
+import com.azure.core.credential.TokenRequestContext;
 import com.azure.cosmos.*;
-//import com.azure.cosmos.models.CosmosDatabaseResponse;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import com.azure.core.credential.TokenCredential;
-//import com.azure.identity.ClientSecretCredentialBuilder;
-//import com.azure.identity.DefaultAzureCredentialBuilder;
-//import java.util.List;
+import com.azure.core.credential.TokenCredential;
+import reactor.core.publisher.Mono;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.identity.ClientSecretCredentialBuilder;
+import java.util.List;
 
 
 import java.time.Duration;
@@ -20,44 +20,33 @@ public class CosmosClientDemo {
 
     public void execute1() {
 
-        executeWorkflow1();
+        authenticate();
 
     }
 
 
-    private static void executeWorkflow1() {
+    private static void authenticate() {
 
         int maxPoolSize =100 ;
         int maxRetryAttempts = 10;
         int retryWaitTimeInSeconds = 1;
-//
 
         String hostName = "https://medium-blog.documents.azure.com:443/";
-        String masterKey= "secret";
+        String masterKey= "OxMZDtgrv1hb1kCIWYLKLUg0m4yjajapP2MgcIZRAQfOL84b8Ay5d9nW5bnBORvYpMN87GKbqGwnu9XdGGTt6g==";
         //String databaseName= "AzureSampleFamilyDatabase";
         ConsistencyLevel consistencyLevel = ConsistencyLevel.SESSION;
         CosmosClient syncClient = null;
-        //CosmosDatabase syncDatabase = null;
 
 
         System.out.println("Payload size : " + 500);
-        syncClient = buildCosmosClient(ConnectionMode.DIRECT, maxPoolSize, maxRetryAttempts, retryWaitTimeInSeconds, hostName, masterKey, consistencyLevel);
-        //syncDatabase = getDB(syncClient, databaseName);
+        syncClient = buildCosmosClientToken(ConnectionMode.DIRECT, maxPoolSize, maxRetryAttempts, retryWaitTimeInSeconds, hostName, masterKey, consistencyLevel);
+        //syncClient = buildCosmosClient(ConnectionMode.DIRECT, maxPoolSize, maxRetryAttempts, retryWaitTimeInSeconds, hostName, masterKey, consistencyLevel);
         System.out.println(syncClient);
 
     }
 
 
-//    private static CosmosDatabase getDB(CosmosClient client, String database) {
-//        CosmosDatabaseResponse databaseResponse = null;
-//        try {
-//            databaseResponse = client.createDatabaseIfNotExists(database);
-//        } catch(CosmosException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return client.getDatabase(database);
-//    }
+
 
     private static ThrottlingRetryOptions getRetryOptions(int maxRetryAttempts,
                                                           int retryWaitTimeInSeconds) {
@@ -84,49 +73,28 @@ public class CosmosClientDemo {
 
     }
 
-//    private static CosmosClient buildCosmosClientToken(ConnectionMode connectionMode, int maxPoolSize, int maxRetryAttempts,
-//        int retryWaitTimeInSeconds, String hostName, String masterKey, ConsistencyLevel consistencyLevel ) {
-//
-//            ThrottlingRetryOptions retryOptions = getRetryOptions(maxRetryAttempts, retryWaitTimeInSeconds);
-//            TokenCredential tokenCredential = new DefaultAzureCredentialBuilder().build();
-//
-//        TokenCredential ServicePrincipal = new ClientSecretCredentialBuilder()
-//                .authorityHost("https://login.microsoftonline.com")
-//                .tenantId("x")
-//                .clientId("y")
-//                .clientSecret("z")
-//                .build();
-//
-//        return new CosmosClientBuilder()
-//                    .endpoint(hostName)
-//                    .key(ServicePrincipal)
-//                    .directMode(DirectConnectionConfig.getDefaultConfig().setIdleConnectionTimeout(Duration.ofMinutes(15)))
-//                    .throttlingRetryOptions(retryOptions)
-//                    .consistencyLevel( consistencyLevel )
-//                    .buildClient();    private static CosmosClient buildCosmosClientToken(ConnectionMode connectionMode, int maxPoolSize, int maxRetryAttempts,
-////        int retryWaitTimeInSeconds, String hostName, String masterKey, ConsistencyLevel consistencyLevel ) {
-////
-////            ThrottlingRetryOptions retryOptions = getRetryOptions(maxRetryAttempts, retryWaitTimeInSeconds);
-////            TokenCredential tokenCredential = new DefaultAzureCredentialBuilder().build();
-////
-////        TokenCredential ServicePrincipal = new ClientSecretCredentialBuilder()
-////                .authorityHost("https://login.microsoftonline.com")
-////                .tenantId("x")
-////                .clientId("y")
-////                .clientSecret("z")
-////                .build();
-////
-////        return new CosmosClientBuilder()
-////                    .endpoint(hostName)
-////                    .key(ServicePrincipal)
-////                    .directMode(DirectConnectionConfig.getDefaultConfig().setIdleConnectionTimeout(Duration.ofMinutes(15)))
-////                    .throttlingRetryOptions(retryOptions)
-////                    .consistencyLevel( consistencyLevel )
-////                    .buildClient();
-////
-////        }
-//
-//        }
+    private static CosmosClient buildCosmosClientToken(ConnectionMode connectionMode, int maxPoolSize, int maxRetryAttempts,
+        int retryWaitTimeInSeconds, String hostName, String masterKey, ConsistencyLevel consistencyLevel ) {
+
+            ThrottlingRetryOptions retryOptions = getRetryOptions(maxRetryAttempts, retryWaitTimeInSeconds);
+
+            TokenCredential ServicePrincipal = new ClientSecretCredentialBuilder()
+                .tenantId("8f12c261-6dbf-47c3-918f-1d15198a3b3b")
+                .clientId("254a124e-9cb5-49b2-919d-faf8c141ac0a")
+                .clientSecret("SFg7Q~VoTutuR61Ij-6y9LHxN1RSPw3G4p3dT")
+                .authorityHost("https://management.azure.com")
+                    .build();
+
+
+        return new CosmosClientBuilder()
+                    .endpoint(hostName)
+                    .credential(ServicePrincipal)
+                    .directMode(DirectConnectionConfig.getDefaultConfig().setIdleConnectionTimeout(Duration.ofMinutes(15)))
+                    .throttlingRetryOptions(retryOptions)
+                    .consistencyLevel( consistencyLevel )
+                    .buildClient();
+
+        }
 
     public static void main(String[] args)
     {
@@ -136,4 +104,3 @@ public class CosmosClientDemo {
     }
 
 }
-
