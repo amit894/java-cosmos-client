@@ -32,7 +32,7 @@ public class CosmosClientDemo {
         int retryWaitTimeInSeconds = 1;
 
         String hostName = "https://medium-blog.documents.azure.com:443/";
-        String masterKey= "OxMZDtgrv1hb1kCIWYLKLUg0m4yjajapP2MgcIZRAQfOL84b8Ay5d9nW5bnBORvYpMN87GKbqGwnu9XdGGTt6g==";
+        String masterKey= "secret";
         //String databaseName= "AzureSampleFamilyDatabase";
         ConsistencyLevel consistencyLevel = ConsistencyLevel.SESSION;
         CosmosClient syncClient = null;
@@ -81,7 +81,7 @@ public class CosmosClientDemo {
             TokenCredential ServicePrincipal = new ClientSecretCredentialBuilder()
                 .tenantId("8f12c261-6dbf-47c3-918f-1d15198a3b3b")
                 .clientId("254a124e-9cb5-49b2-919d-faf8c141ac0a")
-                .clientSecret("SFg7Q~VoTutuR61Ij-6y9LHxN1RSPw3G4p3dT")
+                .clientSecret("secret")
                 .authorityHost("https://management.azure.com")
                     .build();
 
