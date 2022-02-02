@@ -82,8 +82,7 @@ public class CosmosClientDemo {
                 .tenantId("8f12c261-6dbf-47c3-918f-1d15198a3b3b")
                 .clientId("254a124e-9cb5-49b2-919d-faf8c141ac0a")
                 .clientSecret("secret")
-                .authorityHost("https://management.azure.com")
-                    .build();
+                .build();
 
 
         return new CosmosClientBuilder()
